@@ -280,7 +280,24 @@ Open your browser at: `http://localhost:5173`
 
 ---
 
-## 11. End-to-End Evaluation Workflow
+## 11. Cloud Deployment via Git (Render)
+
+This repository is configured with a native [render.yaml](render.yaml) Blueprint that builds both the React frontend and FastAPI backend into a unified full-stack web service:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/VenkataSumanthSaiDharanikota/Network-Intrusion-Detection)
+
+### 1-Click Deployment Steps:
+1. Click the **[Deploy to Render](https://render.com/deploy?repo=https://github.com/VenkataSumanthSaiDharanikota/Network-Intrusion-Detection)** button or navigate to [Render Dashboard](https://dashboard.render.com).
+2. Choose **"New +"** &rarr; **"Blueprint"** (or connect repository `VenkataSumanthSaiDharanikota/Network-Intrusion-Detection`).
+3. Render automatically executes:
+   - **Build Command**: `pip install -r requirements.txt && cd frontend && npm install && npm run build && cd ..`
+   - **Start Command**: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
+4. Once deployed, Render provides your live public web application link (e.g. `https://network-intrusion-detection.onrender.com`).
+
+---
+
+## 12. End-to-End Evaluation Workflow
+
 
 1. **Dashboard**: Inspect system telemetry, active champion model state, and recent detections.
 2. **Detect Traffic**:
@@ -294,7 +311,7 @@ Open your browser at: `http://localhost:5173`
 
 ---
 
-## 12. Technical Limitations & Future Work
+## 13. Technical Limitations & Future Work
 
 - **Dataset-Based Monitoring vs. Raw Live Sniffing**: While raw packet capture via `scapy` or `libpcap` is conceptually possible, raw promiscuous packet sniffing requires root/administrator privileges and OS-specific network drivers (such as WinPcap/Npcap on Windows). To ensure cross-platform compatibility and zero installation friction on student machines, this system focuses on **dataset-based traffic analysis**.
 - **Future Improvements**:
@@ -303,7 +320,7 @@ Open your browser at: `http://localhost:5173`
 
 ---
 
-## 13. Ethical Considerations
+## 14. Ethical Considerations
 
 This software is developed strictly for **defensive security monitoring, educational analysis, and research evaluation** under IEEE Ignite guidelines. It must not be deployed to intercept unauthorized private communications without explicit organizational consent.
 
