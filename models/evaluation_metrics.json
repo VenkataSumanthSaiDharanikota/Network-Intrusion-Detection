@@ -1,0 +1,210 @@
+{
+  "accuracy": 0.7886,
+  "precision": 0.6774,
+  "recall": 0.9722,
+  "f1_score": 0.7985,
+  "macro_f1": 0.7881,
+  "weighted_f1": 0.7866,
+  "macro_precision": 0.823,
+  "macro_recall": 0.8109,
+  "confusion_matrix": {
+    "matrix": [
+      [
+        8337,
+        4496
+      ],
+      [
+        270,
+        9441
+      ]
+    ],
+    "labels": [
+      "Normal",
+      "Malicious"
+    ]
+  },
+  "classification_report": {
+    "Normal": {
+      "precision": 0.9686301847333566,
+      "recall": 0.649653237746435,
+      "f1-score": 0.777705223880597,
+      "support": 12833.0
+    },
+    "Malicious": {
+      "precision": 0.6774054674607161,
+      "recall": 0.9721964782205746,
+      "f1-score": 0.7984607577807848,
+      "support": 9711.0
+    },
+    "accuracy": 0.7885911994322214,
+    "macro avg": {
+      "precision": 0.8230178260970363,
+      "recall": 0.8109248579835049,
+      "f1-score": 0.788082990830691,
+      "support": 22544.0
+    },
+    "weighted avg": {
+      "precision": 0.8431829158620555,
+      "recall": 0.7885911994322214,
+      "f1-score": 0.786645828462957,
+      "support": 22544.0
+    }
+  },
+  "test_distribution": {
+    "Normal": 12833,
+    "Malicious": 9711
+  },
+  "test_records": 22544,
+  "feature_importance": [
+    {
+      "rank": 1,
+      "feature": "src_bytes",
+      "importance": 0.66541,
+      "percentage": 66.54
+    },
+    {
+      "rank": 2,
+      "feature": "dst_host_serror_rate",
+      "importance": 0.09398,
+      "percentage": 9.4
+    },
+    {
+      "rank": 3,
+      "feature": "dst_bytes",
+      "importance": 0.08271,
+      "percentage": 8.27
+    },
+    {
+      "rank": 4,
+      "feature": "duration",
+      "importance": 0.05639,
+      "percentage": 5.64
+    },
+    {
+      "rank": 5,
+      "feature": "hot",
+      "importance": 0.03383,
+      "percentage": 3.38
+    },
+    {
+      "rank": 6,
+      "feature": "flag_s0",
+      "importance": 0.03383,
+      "percentage": 3.38
+    },
+    {
+      "rank": 7,
+      "feature": "dst_host_srv_serror_rate",
+      "importance": 0.02632,
+      "percentage": 2.63
+    },
+    {
+      "rank": 8,
+      "feature": "service_ecr_i",
+      "importance": 0.00752,
+      "percentage": 0.75
+    },
+    {
+      "rank": 9,
+      "feature": "land",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 10,
+      "feature": "wrong_fragment",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 11,
+      "feature": "urgent",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 12,
+      "feature": "num_failed_logins",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 13,
+      "feature": "logged_in",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 14,
+      "feature": "num_compromised",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 15,
+      "feature": "root_shell",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 16,
+      "feature": "su_attempted",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 17,
+      "feature": "num_root",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 18,
+      "feature": "num_file_creations",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 19,
+      "feature": "num_shells",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 20,
+      "feature": "num_access_files",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 21,
+      "feature": "num_outbound_cmds",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 22,
+      "feature": "is_host_login",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 23,
+      "feature": "is_guest_login",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 24,
+      "feature": "count",
+      "importance": 0.0,
+      "percentage": 0.0
+    },
+    {
+      "rank": 25,
+      "feature": "srv_count",
+      "importance": 0.0,
+      "percentage": 0.0
+    }
+  ]
+}

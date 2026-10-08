@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Environments & Secret Configuration
+.env
+.env.*
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+venv/
+.venv/
+env/
+ENV/
+
+# Deployment & Container Files (Exclude from repo)
+Dockerfile*
+docker-compose*
+*.dockerignore
+kubernetes/
+k8s/
+helm/
+deploy/
+deployments/
+*.deploy*
+Procfile
+fly.toml
+render.yaml
+vercel.json
+netlify.toml
+serverless.yml
+
+# Node & Frontend Build
+node_modules/
+dist/
+build/
+.npm
+*.tsbuildinfo
+
+# Operating System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Database & Runtime State (keep samples, models, and processed summaries)
+backend/database/nids.db
+backend/database/nids.db-journal
+data/raw/*.txt.tmp

@@ -1,0 +1,23 @@
+{
+  "name": "network-intrusion-detection-system",
+  "version": "1.0.0",
+  "description": "IEEE Ignite Problem Statement 33 — Network Intrusion Detection System",
+  "private": true,
+  "scripts": {
+    "frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "backend": "python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload"
+  },
+  "keywords": [
+    "network-intrusion-detection",
+    "machine-learning",
+    "scikit-learn",
+    "nids",
+    "fastapi",
+    "react",
+    "cybersecurity",
+    "nsl-kdd"
+  ],
+  "author": "IEEE Ignite Team",
+  "license": "MIT"
+}
