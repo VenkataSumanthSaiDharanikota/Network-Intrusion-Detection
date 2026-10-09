@@ -33,14 +33,12 @@ deployments/
 *.deploy*
 Procfile
 fly.toml
-render.yaml
 vercel.json
 netlify.toml
 serverless.yml
 
 # Node & Frontend Build
 node_modules/
-dist/
 build/
 .npm
 *.tsbuildinfo

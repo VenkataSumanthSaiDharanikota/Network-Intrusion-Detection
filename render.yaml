@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: nids-app
+    runtime: python
+    buildCommand: >
+      pip install --upgrade pip &&
+      pip install -r requirements.txt &&
+      pip install nodeenv &&
+      nodeenv --node=20.18.0 /opt/node &&
+      export PATH=/opt/node/bin:$PATH &&
+      cd frontend && npm install && npm run build && cd ..
+    startCommand: python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+    disk:
+      name: nids-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1
