@@ -45,43 +45,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from pathlib import Path
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-
 # Include core API routes under /api
 app.include_router(api_router, prefix=API_PREFIX)
 
-# Static frontend serving for unified deployment
-frontend_dist = Path(__file__).resolve().parent.parent / "frontend" / "dist"
-
-if frontend_dist.exists() and (frontend_dist / "index.html").exists():
-    assets_dir = frontend_dist / "assets"
-    if assets_dir.exists():
-        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
-
-    @app.get("/{full_path:path}")
-    async def serve_spa(full_path: str):
-        # Allow /docs, /redoc, /openapi.json, and /api to be handled by FastAPI
-        if full_path.startswith("api") or full_path in ("docs", "redoc", "openapi.json"):
-            return JSONResponse({"detail": "Not Found"}, status_code=404)
-        target_file = frontend_dist / full_path
-        if full_path and target_file.is_file():
-            return FileResponse(target_file)
-        return FileResponse(frontend_dist / "index.html")
-else:
-    @app.get("/")
-    def root():
-        return {
-            "project": "Network Intrusion Detection System",
-            "competition": "IEEE Ignite — Problem Statement 33",
-            "version": APP_VERSION,
-            "docs": "/docs",
-            "api_prefix": API_PREFIX
-        }
+@app.get("/")
+def root():
+    return {
+        "project": "Network Intrusion Detection System",
+        "competition": "IEEE Ignite — Problem Statement 33",
+        "version": APP_VERSION,
+        "docs": "/docs",
+        "api_prefix": API_PREFIX
+    }
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("backend.main:app", host="0.0.0.0", port=port, reload=False)
-
+    uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True)

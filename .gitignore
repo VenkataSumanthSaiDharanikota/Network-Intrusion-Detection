@@ -33,6 +33,7 @@ deployments/
 *.deploy*
 Procfile
 fly.toml
+render.yaml
 vercel.json
 netlify.toml
 serverless.yml

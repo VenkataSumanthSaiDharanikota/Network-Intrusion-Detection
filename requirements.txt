@@ -7,4 +7,3 @@ joblib>=1.4.0
 requests>=2.32.0
 python-multipart>=0.0.9
 pydantic>=2.8.0
-aiofiles>=24.1.0

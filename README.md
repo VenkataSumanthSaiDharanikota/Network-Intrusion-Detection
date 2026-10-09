@@ -1,7 +1,7 @@
 # Network Intrusion Detection System (NIDS)
 ### IEEE Ignite — Problem Statement 33
 
-An end-to-end, production-grade Machine Learning system for classifying network traffic and detecting malicious cyber intrusions. Built with **Scikit-Learn**, **FastAPI**, and **React + TypeScript**, trained and evaluated on authentic flow telemetry from the **Canadian Institute for Cybersecurity (UNB) NSL-KDD benchmark**.
+An end-to-end Machine Learning system for classifying network traffic flows and identifying malicious cyber intrusions. Built with **Scikit-Learn**, **FastAPI**, and **React + TypeScript**, trained and evaluated on network connection records from the **Canadian Institute for Cybersecurity (UNB) NSL-KDD benchmark**.
 
 ---
 
@@ -10,33 +10,33 @@ An end-to-end, production-grade Machine Learning system for classifying network 
 ### Official IEEE Ignite Problem Statement:
 > *"Develop a classification or anomaly detection system that identifies potentially malicious network activity using an appropriately sourced network traffic dataset."*
 
-Computer networks in enterprise environments process millions of TCP/IP packets every minute. Adversaries exploit perimeter weaknesses through automated port scans, brute-force remote logins, distributed denial-of-service (DoS) floods, and rootkit privilege escalations.
+Computer networks process large volumes of TCP/IP connections, exposing infrastructure to port scans, brute-force remote logins, Denial of Service (DoS) attacks, and unauthorized privilege escalation. Traditional signature-based detection systems often struggle to identify novel attack variants or multi-stage intrusions without pre-configured rules.
 
-Traditional signature-based intrusion detection tools (such as Snort rules) fail against zero-day variants and novel connection payloads. This project implements a **genuine classical Machine Learning pipeline** capable of:
+This project implements a machine learning pipeline capable of:
 1. Analyzing multi-dimensional network flow statistics.
-2. Handling missing, extreme, and discrete protocol attributes without data leakage.
-3. Evaluating and comparing multiple candidate classifiers.
-4. Serving real-time inference through a secure RESTful API.
-5. Providing full transparency through confusion matrices, classification reports, and feature importance analysis.
+2. Handling missing values and categorical protocol attributes without data leakage.
+3. Training, evaluating, and comparing multiple candidate classifiers.
+4. Serving inference through a RESTful API.
+5. Providing model transparency through confusion matrices, classification reports, and feature importance analysis.
 
-> **Strict Academic Integrity Guarantee**: This system uses **zero synthetic/fake data**, **zero hardcoded predictions**, **no random tickers**, and **no Large Language Models (LLMs)**. All metrics and verdicts are mathematically computed from trained Scikit-Learn models executing on authentic University of New Brunswick network connection logs.
+> **Technical Note on Evaluation**: The models are trained and evaluated on the NSL-KDD benchmark dataset without mocked predictions or simulated classification metrics. All reported results, confusion matrices, and feature importances reflect outputs from Scikit-Learn models evaluated on held-out test data.
 
 ---
 
 ## 2. Key Features
 
-- **Genuine Machine Learning Pipeline**: Scikit-Learn `ColumnTransformer` with `SimpleImputer`, `StandardScaler`, and `OneHotEncoder(handle_unknown='ignore')`.
-- **Zero Data Leakage**: Pipeline is fitted strictly on training data; held-out test splits and uploaded CSV files are transformed strictly without refitting.
+- **Scikit-Learn Preprocessing Pipeline**: Implements `ColumnTransformer` with `SimpleImputer`, `StandardScaler`, and `OneHotEncoder(handle_unknown='ignore')`.
+- **Data Leakage Prevention**: Preprocessing transformers are fitted strictly on the training partition; test data and uploaded inference files are transformed using the fitted pipeline without refitting.
 - **Multi-Algorithm Model Comparison**:
   - **Logistic Regression** (L2-regularized linear baseline)
   - **Random Forest Classifier** (100-tree ensemble with sub-sampling)
   - **HistGradientBoostingClassifier** (Histogram-based gradient boosted decision trees)
-- **Documented Champion Selection**: Automated selection prioritized by **Macro F1-Score** to penalize false negatives on rare minority attack categories.
-- **Strict Schema Validation**: Uploaded traffic files undergo column schema inspection; missing, extra, and incompatible features are clearly flagged with diagnostic reports.
-- **Dataset-Based Monitoring**: Sequential ingestion and batch analysis without fake packet animation or simulated live clocks.
-- **SQLite Historical Persistence**: Completed detection sessions and classification logs are stored locally with queryable session IDs.
-- **Results Export**: One-click CSV export of predictions, attack categories, and confidence scores.
-- **Pre-Packaged Evaluation Samples**: Bundled test samples (`sample_normal_traffic.csv`, `sample_dos_attack_traffic.csv`, `sample_mixed_network_traffic.csv`) extracted from the official test split for 1-click evaluation.
+- **Champion Model Selection**: Candidate models are compared and selected using **Macro F1-Score** to account for class imbalance across attack categories.
+- **Input Schema Validation**: Uploaded CSV files are inspected against the required 41 network flow features, providing clear diagnostic feedback for missing or mismatched columns.
+- **Dataset-Based Monitoring**: Sequential ingestion and batch analysis across recorded network connection logs (does not require OS-specific packet capture drivers or administrator privileges).
+- **SQLite Persistence**: Detection sessions and classification summaries are stored locally in SQLite with queryable session records.
+- **CSV Export**: Export detection results, predicted labels, attack categories, and confidence scores to CSV.
+- **Evaluation Samples**: Includes pre-packaged test samples (`sample_normal_traffic.csv`, `sample_dos_attack_traffic.csv`, `sample_mixed_network_traffic.csv`) extracted from the test partition for testing in the web UI.
 
 ---
 
@@ -69,27 +69,27 @@ Authentic NSL-KDD benchmark distributions, protocol breakdown, and class balance
 ## 4. System Architecture
 
 ```mermaid
-graph TD
-    User([Security Analyst / Evaluator]) -->|Browser UI| FE[React 19 + TypeScript + Tailwind (Port 5173)]
-    FE -->|REST API / Multipart Upload| BE[FastAPI + Uvicorn Backend (Port 8000)]
+flowchart TD
+    User(["Security Analyst / Evaluator"]) -->|Browser UI| FE["React 19 + TypeScript + Tailwind CSS (Port 5173)"]
+    FE -->|REST API / Multipart Upload| BE["FastAPI + Uvicorn Backend (Port 8000)"]
     
-    subgraph Backend Engine
-        BE --> API[FastAPI Routers: System, Dataset, Model, Detection, Analytics]
-        API --> DB[(SQLite Database: nids.db)]
-        API --> ML[ML Engine: Scikit-Learn]
+    subgraph Backend_Engine ["Backend Engine"]
+        BE --> API["FastAPI Routers (System, Dataset, Model, Detection, Analytics)"]
+        API --> DB[("SQLite Database (nids.db)")]
+        API --> ML["ML Engine (Scikit-Learn)"]
     end
 
-    subgraph Machine Learning Pipeline
-        ML --> DM[Dataset Manager: NSL-KDD Loader]
-        ML --> PP[NIDS Preprocessor Pipeline]
-        ML --> TR[Candidate Model Trainer & Comparator]
-        TR --> ART[(Joblib Artifacts: models/)]
-        ML --> INF[Inference Engine]
+    subgraph ML_Pipeline ["Machine Learning Pipeline"]
+        ML --> DM["Dataset Manager (NSL-KDD Loader)"]
+        ML --> PP["NIDS Preprocessor Pipeline"]
+        ML --> TR["Candidate Model Trainer & Comparator"]
+        TR --> ART[("Joblib Artifacts (models/)")]
+        ML --> INF["Inference Engine"]
         ART --> INF
     end
 ```
 
-For in-depth architecture design and sequence diagrams, refer to [docs/architecture.md](docs/architecture.md).
+For detailed architecture documentation and component interactions, refer to [docs/architecture.md](docs/architecture.md).
 
 ---
 
@@ -97,43 +97,43 @@ For in-depth architecture design and sequence diagrams, refer to [docs/architect
 
 ### Frontend
 - **React 19** & **TypeScript**
-- **Vite** (Build tool & development server)
-- **Tailwind CSS** (Custom dark cybersecurity surface tokens)
-- **Recharts** (Performance charts, comparison bars, trend telemetry)
-- **Lucide React** (Security and analytical icons)
+- **Vite** (Build tool and development server)
+- **Tailwind CSS** (Cybersecurity dashboard UI styling)
+- **Recharts** (Performance charts and telemetry visualization)
+- **Lucide React** (Interface icons)
 
 ### Backend
 - **Python 3.10+ / 3.14**
-- **FastAPI** (High-performance asynchronous REST API)
-- **Uvicorn** (ASGI server)
-- **SQLite3** (Lightweight ACID-compliant detection history store)
+- **FastAPI** (Asynchronous REST API framework)
+- **Uvicorn** (ASGI web server)
+- **SQLite3** (Local storage for detection sessions)
 
 ### Machine Learning & Data Processing
 - **Scikit-Learn** (`Pipeline`, `ColumnTransformer`, `StandardScaler`, `OneHotEncoder`, `RandomForestClassifier`, `HistGradientBoostingClassifier`, `LogisticRegression`)
-- **Pandas** & **NumPy**
-- **Joblib** (Model serialization and lifecycle persistence)
+- **Pandas** & **NumPy** (Data processing and matrix operations)
+- **Joblib** (Model serialization and artifact persistence)
 
 ---
 
 ## 6. Dataset Specifications
 
-- **Dataset Name**: **NSL-KDD** (Modernized Canadian Institute for Cybersecurity benchmark)
-- **Original Source**: Canadian Institute for Cybersecurity (CIC), University of New Brunswick (UNB), Canada
-- **Dataset URL**: [https://www.unb.ca/cic/datasets/nsl.html](https://www.unb.ca/cic/datasets/nsl.html)
-- **Total Benchmark Flows**: 47,736 connection records
-  - **Training Partition (`KDDTrain+.txt`)**: 25,192 records (3.64 MB)
-  - **Held-Out Test Partition (`KDDTest+.txt`)**: 22,544 records (3.28 MB)
+- **Dataset Name**: **NSL-KDD**
+- **Issuing Institution**: Canadian Institute for Cybersecurity (CIC), University of New Brunswick (UNB), Canada
+- **Dataset Source**: [https://www.unb.ca/cic/datasets/nsl.html](https://www.unb.ca/cic/datasets/nsl.html)
+- **Total Evaluated Benchmark Records**: 47,736 connection records
+  - **Training Partition (`KDDTrain+_20Percent.txt`)**: 25,192 records (the standard 20% training subset of NSL-KDD, stored locally as `KDDTrain+.txt`)
+  - **Held-Out Test Partition (`KDDTest+.txt`)**: 22,544 records
 - **Feature Dimensions**: 41 flow attributes + 1 class label + 1 difficulty score
   - *Basic Connection Features*: `duration`, `protocol_type`, `service`, `flag`, `src_bytes`, `dst_bytes`, `land`, `wrong_fragment`, `urgent`
   - *Content Features*: `hot`, `num_failed_logins`, `logged_in`, `num_compromised`, `root_shell`, `su_attempted`, `num_root`, `num_file_creations`, `num_shells`, `num_access_files`, `num_outbound_cmds`, `is_host_login`, `is_guest_login`
   - *Time-based Traffic Features*: `count`, `srv_count`, `serror_rate`, `srv_serror_rate`, `rerror_rate`, `srv_rerror_rate`, `same_srv_rate`, `diff_srv_rate`, `srv_diff_host_rate`
   - *Host-based Traffic Features*: `dst_host_count`, `dst_host_srv_count`, `dst_host_same_srv_rate`, `dst_host_diff_srv_rate`, `dst_host_same_src_port_rate`, `dst_host_srv_diff_host_rate`, `dst_host_serror_rate`, `dst_host_srv_serror_rate`, `dst_host_rerror_rate`, `dst_host_srv_rerror_rate`
 - **Target Attack Taxonomy**:
-  - **Normal**: Clean legitimate communication
-  - **DoS**: Denial of Service (`neptune`, `smurf`, `back`, `teardrop`, `pod`, `land`, `mailbomb`, `apache2`, `processtable`, `udpstorm`)
+  - **Normal**: Legitimate communication
+  - **DoS (Denial of Service)**: `neptune`, `smurf`, `back`, `teardrop`, `pod`, `land`, `mailbomb`, `apache2`, `processtable`, `udpstorm`
   - **Probe**: Reconnaissance and port scans (`ipsweep`, `portsweep`, `nmap`, `satan`, `saint`, `mscan`)
-  - **R2L**: Remote to Local unauthorized access (`warezclient`, `guess_passwd`, `imap`, `ftp_write`, `multihop`, `phf`, `spy`)
-  - **U2R**: User to Root privilege escalations (`buffer_overflow`, `loadmodule`, `rootkit`, `perl`, `sqlattack`)
+  - **R2L (Remote to Local)**: Unauthorized access from a remote machine (`warezclient`, `guess_passwd`, `imap`, `ftp_write`, `multihop`, `phf`, `spy`)
+  - **U2R (User to Root)**: Unauthorized local superuser privilege escalation (`buffer_overflow`, `loadmodule`, `rootkit`, `perl`, `sqlattack`)
 
 For full taxonomy breakdown and citations, see [docs/dataset.md](docs/dataset.md).
 
@@ -141,22 +141,23 @@ For full taxonomy breakdown and citations, see [docs/dataset.md](docs/dataset.md
 
 ## 7. Model Evaluation & Benchmark Results
 
-All candidate models were trained strictly on the training partition and evaluated on the identical 22,544 held-out test records:
+All candidate models were trained strictly on the training partition (25,192 records) and evaluated on the held-out test partition (22,544 records):
 
-| Model Algorithm | Accuracy | Precision | Recall | Macro F1 | Weighted F1 | Training Time | Verdict |
+| Model Algorithm | Accuracy | Precision | Recall | Macro F1 | Weighted F1 | Training Time | Selected Status |
 |---|---|---|---|---|---|---|---|
-| **Logistic Regression (L2)** | 75.08% | 64.73% | 92.61% | 0.7502 | 0.7486 | 0.77s | Linear Baseline |
-| **Random Forest (100 Trees)** | 77.11% | 65.86% | 97.30% | 0.7700 | 0.7679 | 0.65s | Non-Linear Ensemble |
-| **HistGradientBoosting** | **78.86%** | **67.74%** | **97.22%** | **0.7881** | **0.7866** | **2.05s** | **CHAMPION SELECTED** |
+| **Logistic Regression (L2)** | 75.08% | 64.73% | 92.61% | 0.7502 | 0.7486 | 0.77s | Baseline |
+| **Random Forest (100 Trees)** | 77.11% | 65.86% | 97.30% | 0.7700 | 0.7679 | 0.65s | Candidate |
+| **HistGradientBoosting** | **78.86%** | **67.74%** | **97.22%** | **0.7881** | **0.7866** | **2.05s** | **Champion Model** |
 
 ### Top Predictive Feature Importances:
-1. `src_bytes` (66.54%) — Source-to-destination byte volume is the single strongest indicator of payload anomaly and DoS flooding.
-2. `dst_host_serror_rate` (9.40%) — Percentage of connections to destination host that encountered SYN errors (port scans & SYN attacks).
-3. `dst_bytes` (8.27%) — Response data payload volume.
+Feature importance values calculated from the trained champion model:
+1. `src_bytes` (66.54%) — Source-to-destination byte volume is the strongest indicator of payload anomaly and DoS flooding.
+2. `dst_host_serror_rate` (9.40%) — Percentage of connections to destination host with SYN errors.
+3. `dst_bytes` (8.27%) — Destination-to-source byte volume.
 4. `duration` (5.64%) — Elapsed connection length.
 5. `hot` (3.38%) — Number of "hot" indicator triggers (accessing system directories, binary execution).
 
-For the complete benchmark report, confusion matrix numbers, and precision/recall curves, see [docs/results.md](docs/results.md) and [models/evaluation_metrics.json](models/evaluation_metrics.json).
+For complete evaluation metrics, confusion matrix values, and per-class reports, refer to [docs/results.md](docs/results.md) and [models/evaluation_metrics.json](models/evaluation_metrics.json).
 
 ---
 
@@ -187,7 +188,7 @@ Network-Intrusion-Detection/
 ├── data/
 │   ├── raw/                    # Downloaded UNB benchmark files (KDDTrain+, KDDTest+)
 │   ├── processed/              # Processed summaries and split metadata
-│   └── samples/                # Pre-packaged test sample CSVs for user testing
+│   └── samples/                # Pre-packaged test sample CSVs for testing
 ├── models/                     # Saved Joblib artifacts
 │   ├── best_model.joblib       # Serialized champion model
 │   ├── preprocessor.joblib     # Serialized preprocessing pipeline
@@ -218,7 +219,7 @@ Network-Intrusion-Detection/
 │   ├── tsconfig.json
 │   └── vite.config.ts
 ├── requirements.txt            # Python dependencies
-├── .gitignore                  # Git ignore rules (secrets, envs, deployment files excluded)
+├── .gitignore                  # Git ignore rules
 ├── .env.example                # Safe environment configuration template
 ├── package.json                # Root runner scripts
 └── README.md                   # Project documentation & benchmark overview
@@ -280,49 +281,32 @@ Open your browser at: `http://localhost:5173`
 
 ---
 
-## 11. Cloud Deployment via Git (Render)
+## 11. End-to-End Evaluation Workflow
 
-This repository is configured with a native [render.yaml](render.yaml) Blueprint that builds both the React frontend and FastAPI backend into a unified full-stack web service:
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/VenkataSumanthSaiDharanikota/Network-Intrusion-Detection)
-
-### 1-Click Deployment Steps:
-1. Click the **[Deploy to Render](https://render.com/deploy?repo=https://github.com/VenkataSumanthSaiDharanikota/Network-Intrusion-Detection)** button or navigate to [Render Dashboard](https://dashboard.render.com).
-2. Choose **"New +"** &rarr; **"Blueprint"** (or connect repository `VenkataSumanthSaiDharanikota/Network-Intrusion-Detection`).
-3. Render automatically executes:
-   - **Build Command**: `pip install -r requirements.txt && cd frontend && npm install && npm run build && cd ..`
-   - **Start Command**: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
-4. Once deployed, Render provides your live public web application link (e.g. `https://network-intrusion-detection.onrender.com`).
+1. **Dashboard**: View system status, active model details, and recent detection sessions.
+2. **Traffic Detection**:
+   - Option A: Upload a custom CSV conforming to the 41-feature schema.
+   - Option B: Test with one of the bundled sample datasets (`sample_mixed_network_traffic.csv`, `sample_dos_attack_traffic.csv`, `sample_normal_traffic.csv`).
+   - The backend validates column headers, applies the fitted preprocessing pipeline, generates predictions and confidence probabilities, and displays results in an interactive table with CSV export.
+3. **Dataset-Based Monitoring**: Feed sequential traffic batches to observe classification distribution and threat proportions across flows.
+4. **Analytics**: Inspect the held-out confusion matrix, per-class classification metrics (precision, recall, F1), and feature importance distributions.
+5. **Model Evaluation**: Review comparison metrics across candidate models and inspect champion model hyperparameters.
+6. **Training Console**: Run training runs comparing Binary (Normal vs. Malicious) or Multiclass objectives with real-time progress updates.
 
 ---
 
-## 12. End-to-End Evaluation Workflow
+## 12. Technical Limitations & Future Work
 
-
-1. **Dashboard**: Inspect system telemetry, active champion model state, and recent detections.
-2. **Detect Traffic**:
-   - Option A: Upload any standard network connection CSV.
-   - Option B: Click **"Test Flow"** on any of the pre-packaged research samples (`sample_mixed_network_traffic.csv`, `sample_dos_attack_traffic.csv`, `sample_normal_traffic.csv`).
-   - The system validates schema, normalizes features through the saved pipeline, executes inference, displays per-flow verdicts with confidence scores, and enables CSV export.
-3. **Dataset Monitoring**: Ingest repeated batches to observe infiltration rates across sequential feeds without simulated clocks.
-4. **Analytics**: Review the held-out confusion matrix, per-class classification reports, and feature importance rankings.
-5. **Model Page**: Inspect the champion model metadata, hyperparameters, and reload artifacts.
-6. **Training Console**: Retrain or compare models across Binary or Multiclass objectives with live progress tracking.
-
----
-
-## 13. Technical Limitations & Future Work
-
-- **Dataset-Based Monitoring vs. Raw Live Sniffing**: While raw packet capture via `scapy` or `libpcap` is conceptually possible, raw promiscuous packet sniffing requires root/administrator privileges and OS-specific network drivers (such as WinPcap/Npcap on Windows). To ensure cross-platform compatibility and zero installation friction on student machines, this system focuses on **dataset-based traffic analysis**.
+- **Dataset-Based Analysis vs. Live Packet Sniffing**: The current system processes structured network flow logs rather than sniffing live raw packets from physical network adapters. Capturing raw packets directly via tools like `libpcap` or `scapy` requires OS-specific capture drivers (e.g., Npcap on Windows) and administrator/root privileges. To ensure cross-platform reproducibility and straightforward local execution, the system operates on connection flow records.
 - **Future Improvements**:
-  - Ingestion of live PCAP / PCAPNG dump files with automated flow extraction (`cicflowmeter`).
-  - Integration with active firewall blocklists (IPTables / Windows Defender Firewall automation) to trigger active connection termination upon threat detection.
+  - Direct ingestion and feature extraction from live PCAP / PCAPNG packet captures using flow extraction tools like `cicflowmeter`.
+  - Integration with host firewall utilities (e.g., Windows Defender Firewall or Linux IPTables) for automated IP blocking upon high-confidence intrusion detection.
 
 ---
 
-## 14. Ethical Considerations
+## 13. Ethical Considerations
 
-This software is developed strictly for **defensive security monitoring, educational analysis, and research evaluation** under IEEE Ignite guidelines. It must not be deployed to intercept unauthorized private communications without explicit organizational consent.
+This project was developed for **defensive security monitoring, educational analysis, and research evaluation** under IEEE Ignite guidelines. It is intended for authorized network monitoring and benchmark research, and should not be used for unauthorized network interception or surveillance.
 
 ---
 
