@@ -68,26 +68,7 @@ Authentic NSL-KDD benchmark distributions, protocol breakdown, and class balance
 
 ## 4. System Architecture
 
-```mermaid
-flowchart TD
-    User(["Security Analyst / Evaluator"]) -->|Browser UI| FE["React 19 + TypeScript + Tailwind CSS (Port 5173)"]
-    FE -->|REST API / Multipart Upload| BE["FastAPI + Uvicorn Backend (Port 8000)"]
-    
-    subgraph Backend_Engine ["Backend Engine"]
-        BE --> API["FastAPI Routers (System, Dataset, Model, Detection, Analytics)"]
-        API --> DB[("SQLite Database (nids.db)")]
-        API --> ML["ML Engine (Scikit-Learn)"]
-    end
-
-    subgraph ML_Pipeline ["Machine Learning Pipeline"]
-        ML --> DM["Dataset Manager (NSL-KDD Loader)"]
-        ML --> PP["NIDS Preprocessor Pipeline"]
-        ML --> TR["Candidate Model Trainer & Comparator"]
-        TR --> ART[("Joblib Artifacts (models/)")]
-        ML --> INF["Inference Engine"]
-        ART --> INF
-    end
-```
+![System Architecture](docs/screenshots/system_architecture.jpg)
 
 For detailed architecture documentation and component interactions, refer to [docs/architecture.md](docs/architecture.md).
 
